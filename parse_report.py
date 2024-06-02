@@ -1,13 +1,18 @@
 """
 This script extracts data from a PDF file containing a medical report.
 """
-
+import os
 import camelot
-import json
 from crewai_tools import tool
+from dotenv import load_dotenv
 
+load_dotenv()
+
+file_path = os.getenv("FILE_PATH")
+
+#C:\Users\Vatsal\OneDrive\Desktop\Wingily assignment\WM17S _diabatic.pdf
 @tool("parse_report_tool")
-def extract_data_from_pdf(file_path="WM17S.pdf"):
+def extract_data_from_pdf(file_path=file_path):
     """
     Extracts data from a PDF file.
 

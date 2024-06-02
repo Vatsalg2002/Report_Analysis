@@ -9,7 +9,7 @@ import os
 from dotenv import load_dotenv
 from crewai import Agent, Task, Crew, Process
 from langchain_openai import ChatOpenAI
-from crewai_tools import tool, SerperDevTool
+from crewai_tools import  SerperDevTool
 from parse_report import extract_data_from_pdf
 
 
@@ -26,11 +26,11 @@ SERPER_API_KEY = os.getenv("SERPER_API_KEY")
 report_reader = Agent(
     role="Report Reader",
     goal="Read the pdf of report and give the result in structured way in json format",
-    backstory="You are an AI reader that take a pdf report and give the result in structured json format",
+    backstory="You are an AI reader that take a pdf report and return the result in structured json format",
     verbose=True,
     allow_delegation=True,
     tools=[extract_data_from_pdf, SerperDevTool()],
-    llm=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.7),
+    llm=ChatOpenAI(model_name="gpt-4", temperature=0.7),
     # llm=Ollama_openhermes
 )
 
@@ -43,7 +43,7 @@ doctor = Agent(
     verbose=True,
     allow_delegation=False,
     tools=[SerperDevTool()],
-    llm=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.7),
+    llm=ChatOpenAI(model_name="gpt-4", temperature=0.7),
     # llm=Ollama_openhermes
 )
 
@@ -51,12 +51,12 @@ doctor = Agent(
 
 recommendation_writer = Agent(
     role="Recommendation Writer",
-    goal="tell the disease that the patient may have if any and provide brief heath recommendations to treat the blood abnormalities and  home remedies to treat it and possible reason for their abnomal values and also provide links to articles present on internet for the patient that will help them to cure the diseases in better way",
+    goal="first give the insights of the report that is being used by doctor then tell the disease that the patient may have if any and provide brief heath recommendations to treat the blood abnormalities and  home remedies to treat it and possible reason for their abnomal values and also provide links to articles present on internet for the patient that will help them to cure the diseases in better way",
     backstory="You are a health expert who can give recommendation to the patients to cure the blood abnormalities with it possible reason and methods. remedies to cure them in a structured json format",
     verbose=True,
     allow_delegation=True,
     tools=[SerperDevTool()],
-    llm=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.7),
+    llm=ChatOpenAI(model_name="gpt-4", temperature=0.7),
     # llm=Ollama_openhermes
 )
 
@@ -71,13 +71,64 @@ task1 = Task(
 task2 = Task(
     description="analyse the reports of the patient and provide thorough insights over it with possible heath diseases and health risks",
     agent=doctor,
-    expected_output="a detailed insights of the patient's heath conditions and possible diseases in json format",
+    expected_output="""
+        a detailed insights of the patient's heath conditions and possible diseases and possible health risks in json format
+        expected output:
+        {
+        "health_conditions": {
+            "1": {
+            "parameter": "Blood Pressure",
+            "result": "Normal",
+            "risk_level": "Low",
+            "description": "The patient's blood pressure reading of 120/80 mmHg falls within the normal range."
+            },
+            ...
+        },
+        "possible_diseases": {
+            "1": {
+            "disease": "Type 2 Diabetes",
+            "risk_level": "Moderate",
+            "description": "Elevated fasting blood glucose levels indicate a risk for type 2 diabetes."
+            }
+            ...
+        },
+        "health_recommendations": {
+            "1": {
+            "recommendation": "Consult a healthcare provider for further evaluation and management of blood glucose levels.",
+            "link": "https://www.diabetes.org/diabetes/type-2"
+            },
+            ...
+    }
+    
+    """,
 )
 
 task3 = Task(
-    description="write recommendations for the patient as per insights and also mention the possible disease to the patient if any and heath risks told by doctor and provide methods to cure them , some home remedies to cure them and also provide links to the artcles that will help the patient to cure the disease in better way",
+    description="give insights of the report then write recommendations for the patient as per insights and also mention the possible disease to the patient if any and heath risks told by doctor and provide methods to cure them , some home remedies to cure them and also provide links to the articles that will help the patient to cure the disease in better way",
     agent=recommendation_writer,
-    expected_output="a detailed recommendation/overview to the patient regarding his/her disease (if any) and to cure the blood abnormalities/disease, with possible reasons for the abnormalities and relevant links to the patient that will help them to cure the disease in better way with some home remedies",
+    expected_output="""
+        a brief insights of the report and then a detailed recommendation/overview to the patient regarding his/her disease (if any) and to cure the blood abnormalities/disease, with possible reasons for the abnormalities and relevant links to the patient that will help them to cure the disease in better way with some home remedies
+        example of the output:
+        {
+    "report_insights": [
+        ...
+    ],
+    "possible_disease": ..,
+    "health_recommendations": {
+        "treatment": ...,
+        "home_remedies": [
+            ...
+        ]
+    },
+    "reasons_abnormal_values": [
+        ...
+    ],
+    "internet_resources": {
+        ...
+    }
+    }
+
+    """,
 )
 
 # instantiating the crew

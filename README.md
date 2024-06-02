@@ -75,7 +75,7 @@ These tasks are performed sequentially, with each agent specializing in a specif
    ```
 
 3. **Prepare the PDF File**:
-   Place the patient's PDF report in the same directory as the script or provide the path to the PDF file.
+   Place the patient's PDF report in the same directory as the script or provide the name of pdf in .env file.
 
 4. **Run the Script**:
    Execute the `index.py` script:
