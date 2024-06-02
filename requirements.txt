@@ -1,0 +1,6 @@
+CrewAI
+opencv-python
+crewai-tools
+langchain_openai
+langchain
+python-dotenv
