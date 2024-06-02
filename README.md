@@ -39,7 +39,7 @@ These tasks are performed sequentially, with each agent specializing in a specif
 
 1. **Task 1**: Extract data from the patient report and format it as JSON.
 2. **Task 2**: Analyze the extracted data and provide detailed insights into the patient's health.
-3. **Task 6**: Write recommendations based on the health analysis, including treatment methods and relevant articles.
+3. **Task 3**: Write recommendations based on the health analysis, including treatment methods and relevant articles.
 
 ### Resources Used
 
