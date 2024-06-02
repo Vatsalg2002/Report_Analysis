@@ -72,7 +72,7 @@ These tasks are performed sequentially, with each agent specializing in a specif
    ```sh
    OPENAI_API_KEY="your_openai_api_key"
    SERPER_API_KEY="your_serper_api_key"
-   FILE_PATH = pdf name that should be in same directory as the script
+   FILE_PATH = "pdf name that should be in same directory as the script"
    ```
 
 3. **Prepare the PDF File**:
