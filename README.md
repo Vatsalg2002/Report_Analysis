@@ -70,8 +70,9 @@ These tasks are performed sequentially, with each agent specializing in a specif
    Set your OpenAI and Serper API keys in .env file:
 
    ```sh
-   export OPENAI_API_KEY="your_openai_api_key"
-   export SERPER_API_KEY="your_serper_api_key"
+   OPENAI_API_KEY="your_openai_api_key"
+   SERPER_API_KEY="your_serper_api_key"
+   FILE_PATH = pdf name that should be in same directory as the script
    ```
 
 3. **Prepare the PDF File**:
